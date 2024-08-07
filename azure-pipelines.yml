@@ -21,3 +21,13 @@ steps:
     publishJUnitResults: true
     testResultsFiles: '**/TEST-*.xml'
     tasks: 'build'
+    # Gradle
+- task: JFrogGradle@1
+  inputs:
+    gradleBuildFile: 'build.gradle'
+    tasks: 'artifactoryPublish'
+    artifactoryResolverService: 'sarangeplus'
+    sourceRepo: 'test-gradle-release'
+    artifactoryDeployerService: 'sarangeplus'
+    targetRepo: 'test-gradle-dev'
+    javaHomeOption: 'JDKVersion'
