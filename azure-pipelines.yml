@@ -7,17 +7,38 @@ trigger:
 - main
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'
 
 steps:
+- script: |
+    # Install JFrog CLI
+    curl -fL https://getcli.jfrog.io | sh
+    chmod +x jfrog
 
-    # Gradle
-- task: JFrogGradle@1
-  inputs:
-    gradleBuildFile: 'build.gradle'
-    tasks: 'artifactoryPublish'
-    artifactoryResolverService: 'sarangeplus'
-    sourceRepo: 'test-gradle-release'
-    artifactoryDeployerService: 'sarangeplus'
-    targetRepo: 'test-gradle-dev'
-    javaHomeOption: 'JDKVersion'
+    # Verify installation
+    ./jfrog --version
+  displayName: 'Install JFrog CLI'
+
+- script: |
+    # Configure JFrog CLI
+    ./jfrog config add my-artifactory \
+      --url=https://gpgtest.jfrog.io/artifactory \
+      --user=$JFROG_USER\
+      --password=$JFROG_PASSWORD
+  displayName: 'Configure JFrog CLI'
+
+- script: |
+    # Upload files to Artifactory
+    ./jfrog rt u "path/to/your/files/*" "my-artifactory-repo/path/in/repo/"
+  displayName: 'Upload Files to Artifactory'
+
+- script: |
+    # Download files from Artifactory
+    ./jfrog rt dl "my-artifactory-repo/path/in/repo/*" "path/to/local/dir/"
+  displayName: 'Download Files from Artifactory'
+
+- script: |
+    # List artifacts in a repository
+    ./jfrog rt s "my-artifactory-repo/path/in/repo/"
+  displayName: 'List Artifacts in Artifactory'
+
