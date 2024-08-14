@@ -17,7 +17,7 @@ steps:
 - task: JFrogToolsInstaller@1
   inputs:
     artifactoryConnection: 'myartifactory'
-    cliInstallationRepo: 'adamp-cran-bin-remote'
+    cliInstallationRepo: 'aa-generic'
     
 - task: JfrogCliV2@1
   inputs:
