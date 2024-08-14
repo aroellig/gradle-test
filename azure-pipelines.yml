@@ -21,4 +21,24 @@ steps:
     arguments: '--output-file=./output.txt'
   displayName: 'Run JFrog CLI Command'
 
+- script: |
+    echo "Extracting access token..."
+    TOKEN=$(cat ./output.txt | grep "access_token" | cut -d '"' -f4)
+    echo "##vso[task.setvariable variable=ARTIFACTORY_TOKEN]$TOKEN"
+  displayName: 'Set Access Token Environment Variable'
+
+- script: |
+    echo "Downloading file from JFrog Artifactory..."
+    curl -H "Authorization: Bearer $(ARTIFACTORY_TOKEN)" -O "https://gpgtest.jfrog.io/artifactory/test-gradle-dev-local/insights%20(1).har"
+  displayName: 'Download File from Artifactory'
+
+- task: Gradle@3
+  inputs:
+    gradleWrapperFile: 'gradlew'
+    tasks: 'build'
+    publishJUnitResults: true
+    testResultsFiles: '**/TEST-*.xml'
+    javaHomeOption: 'JDKVersion'
+    sonarQubeRunAnalysis: false
+    spotBugsAnalysis: false
 
