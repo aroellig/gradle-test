@@ -18,4 +18,10 @@ steps:
   inputs:
     artifactoryConnection: 'myartifactory'
     cliInstallationRepo: 'adamp-cran-bin-remote'
+    
+- task: JfrogCliV2@1
+  inputs:
+        jfrogPlatformConnection: 'myjfrog'
+        command: |
+          jf rt ping
 
