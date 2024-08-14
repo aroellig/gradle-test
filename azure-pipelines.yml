@@ -13,11 +13,6 @@ variables:
 
 steps:
 
-
-- task: JFrogToolsInstaller@1
-  inputs:
-    artifactoryConnection: 'myartifactory'
-    cliInstallationRepo: 'aa-generic'
     
 - task: JfrogCliV2@1
   inputs:
